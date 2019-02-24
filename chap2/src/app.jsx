@@ -1,59 +1,91 @@
 const contentNode = document.getElementById('contents');
+const issues = [{
+	id: 1,
+	status: 'Open',
+	owner: 'Ravan',
+	created: new Date('2019-2-25'),
+	effort: 5,
+	completionDate: undefined,
+	title: 'Error in console when clicking add'
+},
+{
+	id: 2,
+	status: 'Assigned',
+	owner: 'fuck',
+	created: new Date('2019-2-25'),
+	effort: 14,
+	completionDate: new Date('2019-2-26'),
+	title: 'Missing bottom border on panel'
+}
 
-class IssueFilter extends React.Component{
-	render(){
-		return(<div>this is placeholder for filter</div>)
+]
+class IssueFilter extends React.Component {
+	render() {
+		return (<div>this is placeholder for filter</div>)
 	}
 
 
 
 }
-class IssueRow extends React.Component{
-	render(){
-		const borderedStyle ={border:"1px solid silver",padding:4};
-		return(
+class IssueRow extends React.Component {
+	render() {
+		
+		console.log(this.props)
+		const issue = this.props.issue;
+		return (
 			<tr>
-				<td style={borderedStyle}>{this.props.issue_id}</td>
-				<td style={borderedStyle}>{this.props.issue_title}</td>
+				<td>{issue.id}</td>
+				<td>{issue.status}</td>
+				<td>{issue.owner}</td>
+				<td>{issue.created.toDateString()}</td>
+				<td>{issue.effort}</td>
+				<td>{issue.completionDate?issue.completionDate.toDateString():" "}</td>
+				<td>{issue.title}</td>
 			</tr>
 		)
 	}
 }
-class IssueTable extends React.Component{
-	render(){
-		const borderedStyle = {border:"1px solid silver",padding:6};
-		return(<table style={{borderCollapse:"collapse"}}>
-						<thead>
-							<tr>
-								<th style={borderedStyle}>Id</th>
-								<th style={borderedStyle}>Title</th>
-							</tr>
-						</thead>
-						<tbody>
-							<IssueRow issue_id="{1}" issue_title="Error in console when clicking Add"></IssueRow>
-							<IssueRow issue_id="{2}" issue_title="Missing bottom border on panel"></IssueRow>
-						</tbody>
+class IssueTable extends React.Component {
+	render() {
+	
+		
+		const issueRows = this.props.issues.map(issue => <IssueRow key={issue.id} issue={issue}/>)
+		return (<table style={{ borderCollapse: "collapse" }}>
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>状态</th>
+					<th>拥有者</th>
+					<th>创造日期</th>
+					<th>生效期</th>
+					<th>完成日期</th>
+					<th>Title</th>
+				</tr>
+			</thead>
+			<tbody>
+				{issueRows}
+			</tbody>
 		</table>)
 	}
 }
-class IssueAdd extends React.Component{
-	render(){
-		return(<div>this is placeholder for Add</div>)
+class IssueAdd extends React.Component {
+	render() {
+		return (<div>this is placeholder for Add</div>)
 	}
 }
-class IssueList extends React.Component{
-	render(){
+class IssueList extends React.Component {
+	render() {
 		return (
 			<div>
 				<h1>Issue Tracker</h1>
 				<IssueFilter></IssueFilter>
-				<hr/>
-				<IssueTable></IssueTable>
-				<hr/>
+				<hr />
+				<IssueTable issues={issues}></IssueTable>
+				<hr />
 				<IssueAdd></IssueAdd>
 
 			</div>
 		)
 	}
 }
-ReactDOM.render(<IssueList></IssueList>,contentNode)
+ReactDOM.render(<IssueList></IssueList>, contentNode)
