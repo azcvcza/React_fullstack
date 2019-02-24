@@ -1,8 +1,32 @@
 const contentNode = document.getElementById('contents');
+
+class IssueFilter extends React.Component{
+	render(){
+		return(<div>this is placeholder for filter</div>)
+	}
+}
+class IssueTable extends React.Component{
+	render(){
+		return(<div>this is placeholder for table</div>)
+	}
+}
+class IssueAdd extends React.Component{
+	render(){
+		return(<div>this is placeholder for Add</div>)
+	}
+}
 class IssueList extends React.Component{
 	render(){
 		return (
-			<div>this is a placeholder for the issue List.</div>
+			<div>
+				<h1>Issue Tracker</h1>
+				<IssueFilter></IssueFilter>
+				<hr/>
+				<IssueTable></IssueTable>
+				<hr/>
+				<IssueAdd></IssueAdd>
+
+			</div>
 		)
 	}
 }
