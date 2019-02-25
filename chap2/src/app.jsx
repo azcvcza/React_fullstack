@@ -76,6 +76,7 @@ class IssueList extends React.Component {
 	constructor(){
 		super();
 		this.state = {issues:[]};
+		this.createTestIssue = this.createTestIssue.bind(this);
 		setTimeout(this.createTestIssue.bind(this),2000);
 	}
 	createIssue(newIssue){
@@ -103,6 +104,7 @@ class IssueList extends React.Component {
 				<IssueFilter></IssueFilter>
 				<hr />
 				<IssueTable issues={this.state.issues}></IssueTable>
+				<button onClick={this.createTestIssue}>Add</button>
 				<hr />
 				<IssueAdd></IssueAdd>
 

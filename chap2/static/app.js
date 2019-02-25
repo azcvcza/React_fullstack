@@ -142,6 +142,7 @@ class IssueList extends React.Component {
 	constructor() {
 		super();
 		this.state = { issues: [] };
+		this.createTestIssue = this.createTestIssue.bind(this);
 		setTimeout(this.createTestIssue.bind(this), 2000);
 	}
 	createIssue(newIssue) {
@@ -154,7 +155,7 @@ class IssueList extends React.Component {
 		this.loadData();
 	}
 	loadData() {
-		setTimeout(this.setState({ issues: issues }), 500);
+		setTimeout(this.setState({ issues: issues }), 3000);
 	}
 	createTestIssue() {
 		this.createIssue({
@@ -173,6 +174,11 @@ class IssueList extends React.Component {
 			React.createElement(IssueFilter, null),
 			React.createElement('hr', null),
 			React.createElement(IssueTable, { issues: this.state.issues }),
+			React.createElement(
+				'button',
+				{ onClick: this.createTestIssue },
+				'Add'
+			),
 			React.createElement('hr', null),
 			React.createElement(IssueAdd, null)
 		);
