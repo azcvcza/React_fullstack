@@ -29,8 +29,7 @@ class IssueFilter extends React.Component {
 }
 class IssueRow extends React.Component {
 	render() {
-		
-		console.log(this.props)
+
 		const issue = this.props.issue;
 		return (
 			<tr>
@@ -39,7 +38,7 @@ class IssueRow extends React.Component {
 				<td>{issue.owner}</td>
 				<td>{issue.created.toDateString()}</td>
 				<td>{issue.effort}</td>
-				<td>{issue.completionDate?issue.completionDate.toDateString():" "}</td>
+				<td>{issue.completionDate ? issue.completionDate.toDateString() : " "}</td>
 				<td>{issue.title}</td>
 			</tr>
 		)
@@ -47,9 +46,9 @@ class IssueRow extends React.Component {
 }
 class IssueTable extends React.Component {
 	render() {
-	
-		
-		const issueRows = this.props.issues.map(issue => <IssueRow key={issue.id} issue={issue}/>)
+
+
+		const issueRows = this.props.issues.map(issue => <IssueRow key={issue.id} issue={issue} />)
 		return (<table style={{ borderCollapse: "collapse" }}>
 			<thead>
 				<tr>
@@ -74,13 +73,30 @@ class IssueAdd extends React.Component {
 	}
 }
 class IssueList extends React.Component {
+	constructor(){
+		super();
+		this.state = {issues:issues};
+		setTimeout(this.createTestIssue.bind(this),2000);
+	}
+	createIssue(newIssue){
+		const newIssues = this.state.issues.slice();
+		newIssue.id = this.state.issues.length +1;
+		newIssues.push(newIssue)
+		this.setState({issues:newIssues});
+	  
+	}
+	createTestIssue(){
+		this.createIssue({
+			status:'new',owner:'Pieta',created:new Date(),title:"completion date should be optional"
+		})
+	}
 	render() {
 		return (
 			<div>
 				<h1>Issue Tracker</h1>
 				<IssueFilter></IssueFilter>
 				<hr />
-				<IssueTable issues={issues}></IssueTable>
+				<IssueTable issues={this.state.issues}></IssueTable>
 				<hr />
 				<IssueAdd></IssueAdd>
 

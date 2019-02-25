@@ -28,8 +28,7 @@ class IssueFilter extends React.Component {
 }
 class IssueRow extends React.Component {
 	render() {
-		const borderedStyle = { border: "1px solid silver", padding: 4 };
-		console.log(this.props);
+
 		const issue = this.props.issue;
 		return React.createElement(
 			'tr',
@@ -74,7 +73,6 @@ class IssueRow extends React.Component {
 }
 class IssueTable extends React.Component {
 	render() {
-		const borderedStyle = { border: "1px solid silver", padding: 6 };
 
 		const issueRows = this.props.issues.map(issue => React.createElement(IssueRow, { key: issue.id, issue: issue }));
 		return React.createElement(
@@ -141,6 +139,22 @@ class IssueAdd extends React.Component {
 	}
 }
 class IssueList extends React.Component {
+	constructor() {
+		super();
+		this.state = { issues: issues };
+		setTimeout(this.createTestIssue.bind(this), 2000);
+	}
+	createIssue(newIssue) {
+		const newIssues = this.state.issues.slice();
+		newIssue.id = this.state.issues.length + 1;
+		newIssues.push(newIssue);
+		this.setState({ issues: newIssues });
+	}
+	createTestIssue() {
+		this.createIssue({
+			status: 'new', owner: 'Pieta', created: new Date(), title: "completion date should be optional"
+		});
+	}
 	render() {
 		return React.createElement(
 			'div',
@@ -152,7 +166,7 @@ class IssueList extends React.Component {
 			),
 			React.createElement(IssueFilter, null),
 			React.createElement('hr', null),
-			React.createElement(IssueTable, { issues: issues }),
+			React.createElement(IssueTable, { issues: this.state.issues }),
 			React.createElement('hr', null),
 			React.createElement(IssueAdd, null)
 		);
