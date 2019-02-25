@@ -141,7 +141,7 @@ class IssueAdd extends React.Component {
 class IssueList extends React.Component {
 	constructor() {
 		super();
-		this.state = { issues: issues };
+		this.state = { issues: [] };
 		setTimeout(this.createTestIssue.bind(this), 2000);
 	}
 	createIssue(newIssue) {
@@ -150,9 +150,15 @@ class IssueList extends React.Component {
 		newIssues.push(newIssue);
 		this.setState({ issues: newIssues });
 	}
+	componentDidMount() {
+		this.loadData();
+	}
+	loadData() {
+		setTimeout(this.setState({ issues: issues }), 500);
+	}
 	createTestIssue() {
 		this.createIssue({
-			status: 'new', owner: 'Pieta', created: new Date(), title: "completion date should be optional"
+			status: 'new', owner: 'Pieta', created: new Date(), effort: 20, completionDate: new Date('2019-2-26'), title: "completion date should be optional"
 		});
 	}
 	render() {
