@@ -98,10 +98,27 @@ class IssueList extends React.Component {
 		this.createIssue = this.createIssue.bind(this);
 	}
 	createIssue(newIssue) {
-		const newIssues = this.state.issues.slice();
-		newIssue.id = this.state.issues.length + 1;
-		newIssues.push(newIssue)
-		this.setState({ issues: newIssues });
+		fetch('http://localhost:3000/api/issues',{
+			method:'POST',
+			mode:'no-cors',
+			cache:'default',
+			headers:{'Content-Type':'application/json'},
+			body:JSON.stringify(newIssue),
+			
+		})
+		.then(response=> response.json())
+		.then(updatedIssues=>{
+			
+					updatedIssues.created = new Date(updatedIssues.created);
+					if(updatedIssues.completionDate){
+						updatedIssues.completionDate = new Date(completionDate);
+					}
+					const newIssues = this. state.issues.concat(updatedIssues);
+					this.setState({issues:newIssues})
+		})
+		.catch(err=>{
+			this.loadData();
+			console.log("err in sending msg to svr:",err.message)})
 
 	}
 

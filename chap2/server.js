@@ -32,6 +32,7 @@ app.get('/api/issues', (req, res) => {
 })
 
 app.post('/api/issues', (req, res) => {
+
     const newIssue = req.body;
     newIssue.id = issues.length + 1;
     newIssue.created = new Date();
@@ -39,7 +40,9 @@ app.post('/api/issues', (req, res) => {
         newIssue.status = 'New';
     }
     issues.push(newIssue)
+
     res.json(newIssue);
+    console.log("receive from post", issues)
 })
 
 app.listen(3000, () => {
