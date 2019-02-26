@@ -180,16 +180,19 @@ class IssueList extends React.Component {
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(newIssue)
 
-		}).then(response => response.json()).then(updatedIssues => {
+		}).then(response => response.json()).then(fetch('http://localhost:3000/api/issues', {
+			method: 'GET',
+			mode: 'cors',
+			cache: 'default' }).then(res => res.json()).then(data => {
+			data.records.forEach(issue => {
+				issue.created = new Date(issue.created);
+				if (issue.completionDate) {
+					issue.completionDate = new Date(issue.completionDate);
+				}
+			});
+			this.setState({ issues: data.records });
+		})).catch(err => {
 
-			updatedIssues.created = new Date(updatedIssues.created);
-			if (updatedIssues.completionDate) {
-				updatedIssues.completionDate = new Date(completionDate);
-			}
-			const newIssues = this.state.issues.concat(updatedIssues);
-			this.setState({ issues: newIssues });
-		}).catch(err => {
-			this.loadData();
 			console.log("err in sending msg to svr:", err.message);
 		});
 	}
