@@ -25,8 +25,12 @@ const issues = [{
 ];
 app.get('/api/issues', (req, res) => {
     const metadata = { total_count: issues.length };
-    res.json({ _metadata: metadata, records: issues });
+    res.set('Content-Type', 'application/json');
+    res.set('Access-Control-Allow-Origin', '*');
+    res.send(JSON.stringify({ _metadata: metadata, records: issues }))
+    console.log("finished sending")
 })
+
 app.post('/api/issues', (req, res) => {
     const newIssue = req.body;
     newIssue.id = issues.length + 1;
@@ -37,6 +41,7 @@ app.post('/api/issues', (req, res) => {
     issues.push(newIssue)
     res.json(newIssue);
 })
+
 app.listen(3000, () => {
     console.log("start at port 3000")
 })

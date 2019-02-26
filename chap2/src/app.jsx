@@ -1,5 +1,5 @@
 const contentNode = document.getElementById('contents');
-const issues = [{
+/*const issues = [{
 	id: 1,
 	status: 'Open',
 	owner: 'Ravan',
@@ -18,7 +18,7 @@ const issues = [{
 	title: 'Missing bottom border on panel'
 }
 
-]
+]*/
 class IssueFilter extends React.Component {
 	render() {
 		return (<div>this is placeholder for filter</div>)
@@ -68,48 +68,67 @@ class IssueTable extends React.Component {
 	}
 }
 class IssueAdd extends React.Component {
-	constructor(){
+	constructor() {
 		super();
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
-	handleSubmit(e){
+	handleSubmit(e) {
 		e.preventDefault();
 		var form = document.forms.issueAdd;
 		this.props.createIssue({
-			owner:form.owner.value,
-			title:form.title.value,
-			created:new Date(),
+			owner: form.owner.value,
+			title: form.title.value,
+			created: new Date(),
 		})
 		form.owner.value = "";
 		form.title.value = "";
 	}
 	render() {
 		return (<div><form name="issueAdd" onSubmit={this.handleSubmit}>
-			<input type="text" name="owner" placeholder="owner"/>
-			<input type="text" name="title" placeholder="Title"/>
+			<input type="text" name="owner" placeholder="owner" />
+			<input type="text" name="title" placeholder="Title" />
 			<button>Add</button>
 		</form></div>)
 	}
 }
 class IssueList extends React.Component {
-	constructor(){
+	constructor() {
 		super();
-		this.state = {issues:[]};
+		this.state = { issues: [] };
 		this.createIssue = this.createIssue.bind(this);
 	}
-	createIssue(newIssue){
+	createIssue(newIssue) {
 		const newIssues = this.state.issues.slice();
-		newIssue.id = this.state.issues.length +1;
+		newIssue.id = this.state.issues.length + 1;
 		newIssues.push(newIssue)
-		this.setState({issues:newIssues});
-	  
+		this.setState({ issues: newIssues });
+
 	}
-	
-	componentDidMount(){
+
+	componentDidMount() {
 		this.loadData();
 	}
-	loadData(){
-		setTimeout(this.setState({issues:issues}),3000)
+	loadData() {
+		fetch('http://localhost:3000/api/issues', {
+			method: 'GET',
+			mode: 'cors',
+			cache: 'default',
+			
+		})
+			.then(response => response.json())
+			.then(data => {
+				console.log("total count:", data._metadata.total_count);
+				data.records.forEach(issue => {
+					issue.created = new Date(issue.created);
+					if (issue.completionDate) {
+						issue.completionDate = new Date(issue.completionDate);
+					}
+				})
+				this.setState({ issues: data.records });
+			}).catch(err => {
+				console.log(err)
+			})
+
 	}
 	render() {
 		return (
