@@ -180,18 +180,26 @@ class IssueList extends React.Component {
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(newIssue)
 
-		}).then(response => response.json()).then(fetch('http://localhost:3000/api/issues', {
-			method: 'GET',
-			mode: 'cors',
-			cache: 'default' }).then(res => res.json()).then(data => {
-			data.records.forEach(issue => {
-				issue.created = new Date(issue.created);
-				if (issue.completionDate) {
-					issue.completionDate = new Date(issue.completionDate);
-				}
-			});
-			this.setState({ issues: data.records });
-		})).catch(err => {
+		}).then(response => {
+			if (response.ok) {
+				fetch('http://localhost:3000/api/issues', {
+					method: 'GET',
+					mode: 'cors',
+					cache: 'default' }).then(res => res.json()).then(data => {
+					data.records.forEach(issue => {
+						issue.created = new Date(issue.created);
+						if (issue.completionDate) {
+							issue.completionDate = new Date(issue.completionDate);
+						}
+					});
+					this.setState({ issues: data.records });
+				});
+			} else {
+				response.json().then(error => {
+					alert("faild to add issue:" + error.message);
+				});
+			}
+		}).catch(err => {
 
 			console.log("err in sending msg to svr:", err.message);
 		});

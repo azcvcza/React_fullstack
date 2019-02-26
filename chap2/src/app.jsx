@@ -106,9 +106,9 @@ class IssueList extends React.Component {
 			body:JSON.stringify(newIssue),
 			
 		})
-		.then(response=> response.json())
-		.then(
-			fetch('http://localhost:3000/api/issues',{
+		.then(response=> {
+			if(response.ok){
+				fetch('http://localhost:3000/api/issues',{
 			method: 'GET',
 			mode: 'cors',
 			cache: 'default',})
@@ -122,7 +122,12 @@ class IssueList extends React.Component {
 				})
 				this.setState({ issues: data.records });
 			})
-		)
+			}else{
+				response.json().then(error=>{
+					alert("faild to add issue:"+error.message);
+				})
+			}
+		})
 		.catch(err=>{
 			
 			console.log("err in sending msg to svr:",err.message)})
