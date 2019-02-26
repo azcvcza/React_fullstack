@@ -130,11 +130,36 @@ class IssueTable extends React.Component {
 	}
 }
 class IssueAdd extends React.Component {
+	constructor() {
+		super();
+		this.handleSubmit = this.handleSubmit.bind(this);
+	}
+	handleSubmit(e) {
+		e.preventDefault();
+		var form = document.forms.issueAdd;
+		this.props.createIssue({
+			owner: form.owner.value,
+			title: form.title.value,
+			created: new Date()
+		});
+		form.owner.value = "";
+		form.title.value = "";
+	}
 	render() {
 		return React.createElement(
 			'div',
 			null,
-			'this is placeholder for Add'
+			React.createElement(
+				'form',
+				{ name: 'issueAdd', onSubmit: this.handleSubmit },
+				React.createElement('input', { type: 'text', name: 'owner', placeholder: 'owner' }),
+				React.createElement('input', { type: 'text', name: 'title', placeholder: 'Title' }),
+				React.createElement(
+					'button',
+					null,
+					'Add'
+				)
+			)
 		);
 	}
 }
@@ -142,8 +167,7 @@ class IssueList extends React.Component {
 	constructor() {
 		super();
 		this.state = { issues: [] };
-		this.createTestIssue = this.createTestIssue.bind(this);
-		setTimeout(this.createTestIssue.bind(this), 2000);
+		this.createIssue = this.createIssue.bind(this);
 	}
 	createIssue(newIssue) {
 		const newIssues = this.state.issues.slice();
@@ -151,16 +175,12 @@ class IssueList extends React.Component {
 		newIssues.push(newIssue);
 		this.setState({ issues: newIssues });
 	}
+
 	componentDidMount() {
 		this.loadData();
 	}
 	loadData() {
 		setTimeout(this.setState({ issues: issues }), 3000);
-	}
-	createTestIssue() {
-		this.createIssue({
-			status: 'new', owner: 'Pieta', created: new Date(), effort: 20, completionDate: new Date('2019-2-26'), title: "completion date should be optional"
-		});
 	}
 	render() {
 		return React.createElement(
@@ -174,13 +194,8 @@ class IssueList extends React.Component {
 			React.createElement(IssueFilter, null),
 			React.createElement('hr', null),
 			React.createElement(IssueTable, { issues: this.state.issues }),
-			React.createElement(
-				'button',
-				{ onClick: this.createTestIssue },
-				'Add'
-			),
 			React.createElement('hr', null),
-			React.createElement(IssueAdd, null)
+			React.createElement(IssueAdd, { createIssue: this.createIssue })
 		);
 	}
 }
