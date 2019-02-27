@@ -5,9 +5,7 @@ const MongoClient = require('mongodb').MongoClient;
 app.use(express.static('static'));
 app.use(bodyparser.json());
 let db;
-const issues = [
 
-];
 const validIssueStatus = {
     New: true,
     Open: true,
@@ -17,7 +15,7 @@ const validIssueStatus = {
     Closed: true,
 };
 const issueFieldType = {
-    id: 'required',
+
     status: 'required',
     owner: 'required',
     effort: 'optional',
@@ -63,27 +61,45 @@ app.get('/api/issues', (req, res) => {
 })
 
 app.post('/api/issues', (req, res) => {
-
+    console.log("req:", req)
     const newIssue = req.body;
-    newIssue.id = issues.length + 1;
+    //newIssue.id = issues.length + 1;
     newIssue.created = new Date();
     if (!newIssue.status) {
         newIssue.status = 'New';
     }
+
     const err = validateIssue(newIssue);
+    console.log(newIssue, err);
     if (err) {
         res.status(422).json({ message: `invalid request:${err}` })
         return;
     }
+    var issueTracker = db.db('issueTracker');
+    var collection = issueTracker.collection('issues');
+    //console.log(collection)
+    collection.insertOne(newIssue)
+        .then(result => {
+            collection.find({ _id: result.insertedId }).limit(1).next();
+        })
+        .then(newIssue => {
+            res.json(newIssue);
+        })
+        .catch(err => {
+            console.log("err in post data to local:", err);
+            res.status(500).json({ message: `Internal Server Error:${error}` });
+        })
+        /*
     issues.push(newIssue)
 
-    res.json(newIssue);
-    console.log("receive from post", issues)
+		res.json(newIssue);
+		*/
+        //console.log("receive from post", issues)
 })
 MongoClient.connect('mongodb://localhost/issueTracker')
     .then(connection => {
         db = connection;
-        console.log(db)
+        //console.log(db)
         app.listen(3000, () => {
             console.log("start at port 3000")
         })

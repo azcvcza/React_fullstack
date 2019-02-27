@@ -140,10 +140,11 @@ class IssueAdd extends React.Component {
 	handleSubmit(e) {
 		e.preventDefault();
 		var form = document.forms.issueAdd;
+		console.log(form.owner.value, form.title.value);
 		this.props.createIssue({
 			owner: form.owner.value,
-			title: form.title.value,
-			created: new Date()
+			title: form.title.value
+
 		});
 		form.owner.value = "";
 		form.title.value = "";
@@ -173,18 +174,19 @@ class IssueList extends React.Component {
 		this.createIssue = this.createIssue.bind(this);
 	}
 	createIssue(newIssue) {
+		console.log("in createIssue,newIssue:", newIssue, JSON.stringify(newIssue));
 		fetch('http://localhost:3000/api/issues', {
 			method: 'POST',
 			mode: 'no-cors',
-			cache: 'default',
+			'Access-Control-Allow-Origin': '*',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(newIssue)
-
 		}).then(response => {
 			if (response.ok) {
 				fetch('http://localhost:3000/api/issues', {
 					method: 'GET',
 					mode: 'cors',
+
 					cache: 'default'
 				}).then(res => res.json()).then(data => {
 
