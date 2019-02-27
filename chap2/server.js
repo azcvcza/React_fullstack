@@ -1,9 +1,11 @@
 const express = require('express')
 const bodyparser = require('body-parser')
+const cors = require('cors');
 const app = express();
 const MongoClient = require('mongodb').MongoClient;
 app.use(express.static('static'));
 app.use(bodyparser.json());
+app.use(cors());
 let db;
 
 const validIssueStatus = {
@@ -61,14 +63,17 @@ app.get('/api/issues', (req, res) => {
 })
 
 app.post('/api/issues', (req, res) => {
-    console.log("req:", req)
+    console.log("req:", req.body)
     const newIssue = req.body;
     //newIssue.id = issues.length + 1;
     newIssue.created = new Date();
     if (!newIssue.status) {
         newIssue.status = 'New';
     }
-
+    if (!newIssue.owner || !newIssue.title) {
+        newIssue.owner = 'test null';
+        newIssue.title = 'body still null';
+    }
     const err = validateIssue(newIssue);
     console.log(newIssue, err);
     if (err) {
@@ -83,6 +88,8 @@ app.post('/api/issues', (req, res) => {
             collection.find({ _id: result.insertedId }).limit(1).next();
         })
         .then(newIssue => {
+            res.set('Content-Type', 'application/json');
+            res.set('Access-Control-Allow-Origin', '*');
             res.json(newIssue);
         })
         .catch(err => {

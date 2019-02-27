@@ -102,8 +102,8 @@ class IssueList extends React.Component {
 		console.log("in createIssue,newIssue:",newIssue,JSON.stringify(newIssue))
 		fetch('http://localhost:3000/api/issues', {
 			method: 'POST',
-			mode:'no-cors',
-			'Access-Control-Allow-Origin': '*',
+			mode:'cors',
+			
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(newIssue),
 		})
