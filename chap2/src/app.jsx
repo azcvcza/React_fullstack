@@ -33,7 +33,7 @@ class IssueRow extends React.Component {
 		const issue = this.props.issue;
 		return (
 			<tr>
-				<td>{issue.id}</td>
+				<td>{issue._id}</td>
 				<td>{issue.status}</td>
 				<td>{issue.owner}</td>
 				<td>{issue.created.toDateString()}</td>
@@ -48,7 +48,7 @@ class IssueTable extends React.Component {
 	render() {
 
 
-		const issueRows = this.props.issues.map(issue => <IssueRow key={issue.id} issue={issue} />)
+		const issueRows = this.props.issues.map(issue => <IssueRow key={issue._id} issue={issue} />)
 		return (<table style={{ borderCollapse: "collapse" }}>
 			<thead>
 				<tr>
@@ -114,6 +114,7 @@ class IssueList extends React.Component {
 			cache: 'default',})
 			.then(res=>res.json())
 			.then(data =>{
+				
 				data.records.forEach(issue => {
 					issue.created = new Date(issue.created);
 					if (issue.completionDate) {
@@ -146,6 +147,7 @@ class IssueList extends React.Component {
 		})
 			.then(response => response.json())
 			.then(data => {
+				console.log("data after get:",data.records)
 				console.log("total count:", data._metadata.total_count);
 				data.records.forEach(issue => {
 					issue.created = new Date(issue.created);

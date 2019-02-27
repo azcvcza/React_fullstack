@@ -39,7 +39,7 @@ class IssueRow extends React.Component {
 			React.createElement(
 				"td",
 				null,
-				issue.id
+				issue._id
 			),
 			React.createElement(
 				"td",
@@ -77,7 +77,7 @@ class IssueRow extends React.Component {
 class IssueTable extends React.Component {
 	render() {
 
-		const issueRows = this.props.issues.map(issue => React.createElement(IssueRow, { key: issue.id, issue: issue }));
+		const issueRows = this.props.issues.map(issue => React.createElement(IssueRow, { key: issue._id, issue: issue }));
 		return React.createElement(
 			"table",
 			{ style: { borderCollapse: "collapse" } },
@@ -186,6 +186,7 @@ class IssueList extends React.Component {
 					method: 'GET',
 					mode: 'cors',
 					cache: 'default' }).then(res => res.json()).then(data => {
+
 					data.records.forEach(issue => {
 						issue.created = new Date(issue.created);
 						if (issue.completionDate) {
@@ -215,6 +216,7 @@ class IssueList extends React.Component {
 			cache: 'default'
 
 		}).then(response => response.json()).then(data => {
+			console.log("data after get:", data.records);
 			console.log("total count:", data._metadata.total_count);
 			data.records.forEach(issue => {
 				issue.created = new Date(issue.created);
