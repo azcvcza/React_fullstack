@@ -98,40 +98,42 @@ class IssueList extends React.Component {
 		this.createIssue = this.createIssue.bind(this);
 	}
 	createIssue(newIssue) {
-		fetch('http://localhost:3000/api/issues',{
-			method:'POST',
-			mode:'no-cors',
-			cache:'default',
-			headers:{'Content-Type':'application/json'},
-			body:JSON.stringify(newIssue),
-			
+		fetch('http://localhost:3000/api/issues', {
+			method: 'POST',
+			mode: 'no-cors',
+			cache: 'default',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(newIssue),
+
 		})
-		.then(response=> {
-			if(response.ok){
-				fetch('http://localhost:3000/api/issues',{
-			method: 'GET',
-			mode: 'cors',
-			cache: 'default',})
-			.then(res=>res.json())
-			.then(data =>{
-				
-				data.records.forEach(issue => {
-					issue.created = new Date(issue.created);
-					if (issue.completionDate) {
-						issue.completionDate = new Date(issue.completionDate);
-					}
-				})
-				this.setState({ issues: data.records });
+			.then(response => {
+				if (response.ok) {
+					fetch('http://localhost:3000/api/issues', {
+						method: 'GET',
+						mode: 'cors',
+						cache: 'default',
+					})
+						.then(res => res.json())
+						.then(data => {
+
+							data.records.forEach(issue => {
+								issue.created = new Date(issue.created);
+								if (issue.completionDate) {
+									issue.completionDate = new Date(issue.completionDate);
+								}
+							})
+							this.setState({ issues: data.records });
+						})
+				} else {
+					response.json().then(error => {
+						alert("faild to add issue:" + error.message);
+					})
+				}
 			})
-			}else{
-				response.json().then(error=>{
-					alert("faild to add issue:"+error.message);
-				})
-			}
-		})
-		.catch(err=>{
-			
-			console.log("err in sending msg to svr:",err.message)})
+			.catch(err => {
+
+				console.log("err in sending msg to svr:", err.message)
+			})
 
 	}
 
@@ -143,23 +145,33 @@ class IssueList extends React.Component {
 			method: 'GET',
 			mode: 'cors',
 			cache: 'default',
-			
+
 		})
-			.then(response => response.json())
-			.then(data => {
-				console.log("data after get:",data.records)
-				console.log("total count:", data._metadata.total_count);
-				data.records.forEach(issue => {
-					issue.created = new Date(issue.created);
-					if (issue.completionDate) {
-						issue.completionDate = new Date(issue.completionDate);
-					}
-				})
-				this.setState({ issues: data.records });
+			.then(response => {
+				if (response.ok) {
+					response.json()
+						.then(data => {
+							console.log("data after get:", data.records)
+							console.log("total count:", data._metadata.total_count);
+							data.records.forEach(issue => {
+								issue.created = new Date(issue.created);
+								if (issue.completionDate) {
+									issue.completionDate = new Date(issue.completionDate);
+								}
+							})
+							this.setState({ issues: data.records });
+						})
+				}
+				else {
+					response.json()
+						.then(error => {
+							alert("failed to fetch data in loadData:" + error.message);
+						})
+				}
+
 			}).catch(err => {
 				console.log(err)
 			})
-
 	}
 	render() {
 		return (
