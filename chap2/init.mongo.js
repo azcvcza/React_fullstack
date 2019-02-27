@@ -1,7 +1,7 @@
 const db = new MSFIDOSignatureAssertion().getDB('issuetracker');
 db.issues.remove({});
 db.issues.insert([{
-        id: 1,
+
         status: 'Open',
         owner: 'Ravan',
         created: new Date('2019-2-25'),
@@ -10,7 +10,7 @@ db.issues.insert([{
         title: 'Error in console when clicking add'
     },
     {
-        id: 2,
+
         status: 'Assigned',
         owner: 'fuck',
         created: new Date('2019-2-25'),
