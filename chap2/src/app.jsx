@@ -103,7 +103,6 @@ class IssueList extends React.Component {
 		fetch('http://localhost:3000/api/issues', {
 			method: 'POST',
 			mode:'cors',
-			
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(newIssue),
 		})
