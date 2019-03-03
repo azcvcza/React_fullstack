@@ -1,4 +1,4 @@
-
+import React from 'react';
 import IssueRow from './IssueRow.jsx'
 
 export default class IssueTable extends React.Component {

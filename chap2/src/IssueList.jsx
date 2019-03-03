@@ -1,7 +1,8 @@
 import IssueAdd from './IssueAdd.jsx'
 import IssueFilter from './IssueFilter.jsx'
-import IssueRow from './IssueRow.jsx'
 import IssueTable from './IssueTable.jsx'
+import React from 'react';
+import 'whatwg-fetch';
 export default class IssueList extends React.Component {
 	constructor() {
 		super();
