@@ -1,7 +1,7 @@
 const express = require('express')
 const bodyparser = require('body-parser')
 const cors = require('cors');
-const Issues_Outside = require('../issue')
+const Issues_Outside = require('./issue')
 const app = express();
 const MongoClient = require('mongodb').MongoClient;
 app.use(express.static('static'));
